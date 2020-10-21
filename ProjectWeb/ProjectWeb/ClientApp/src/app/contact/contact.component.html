@@ -1,0 +1,72 @@
+<body>
+
+
+  <div class="container-contact100">
+    <div>
+
+
+      <form [formGroup]="SendMail" (ngSubmit)="OnSend()" class="contact100-form validate-form">
+        <span class="contact100-form-title">
+          Contact Us
+        </span>
+
+        <div class="wrap-input100 rs1-wrap-input100 validate-input" data-validate="Name is required">
+          <span class="label-input100">Your Name</span>
+          <input formControlName="sender" required class="input100" type="text" name="name" placeholder="Enter your name">
+          <div class="errorMessage" *ngIf="sender.touched && sender.errors">
+            <span *ngIf="sender.hasError('required')">Name is required.</span>
+          </div>
+          <span class="focus-input100"></span>
+        </div>
+
+        <div class="wrap-input100 rs1-wrap-input100 validate-input"
+             data-validate="Valid email is required: ex@abc.xyz">
+          <span class="label-input100">Email</span>
+          <input formControlName="senderMail" required class="input100" type="text" name="email" placeholder="Enter your email addess">
+          <div class="errorMessage" *ngIf="senderMail.touched && senderMail.errors">
+            <span class="label-input100" *ngIf="senderMail.hasError('required')"> Email is required.</span>
+          </div> <span class="focus-input100"></span>
+        </div>
+
+        <div class="wrap-input100 validate-input" data-validate="Message is required">
+          <span class="label-input100">Message</span>
+          <textarea formControlName="message" required class="input100" name="message" placeholder="Your message here..."></textarea>
+          <div class="errorMessage" *ngIf="message.touched && message.errors">
+            <span *ngIf="message.hasError('required')">Message Name is required.</span>
+          </div> <span class="focus-input100"></span>
+        </div>
+
+        <div class="container-contact100-form-btn">
+          <button [disabled]="SendMail.invalid" class="contact100-form-btn">
+            <span>
+              Submit
+
+              <i class="far fa-paper-plane" aria-hidden="true"></i>
+            </span>
+          </button>
+        </div>
+      </form>
+
+      <span class="contact100-more">
+        For any question contact our 24/7 call center: <span class="contact100-more-highlight">+216 90 109 057</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <ng-template #SucTemplate>
+    <div class="modal-body text-center">
+      <b>
+        <p class="list-group-item list-group-item-success">{{modalMessage}}</p>
+      </b>
+    </div>
+  </ng-template>
+  <!-- Unsic Update Product-->
+  <ng-template #FailTemplate>
+    <div class="modal-body text-center">
+      <b>
+        <p class="list-group-item list-group-item-danger">{{modalMessage}}</p>
+      </b>
+    </div>
+  </ng-template>
+</body>

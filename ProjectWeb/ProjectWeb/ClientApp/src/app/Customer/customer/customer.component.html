@@ -1,0 +1,300 @@
+<body>
+  <br>
+  <div class="container-fluid">
+    <button class="btn btn-warning mb-3 float-left text-uppercase" *ngIf="userRoleStatus == 'Customer'"
+      (click)="onAddCustomer()"><i class="fa fa-plus"></i> Add Customer</button>
+    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered row-border hover"
+      style="width:100%">
+      <thead class="text-center thead-dark">
+        <tr>
+          <th data-visible="false">Id</th>
+          <th>customerTypeId</th>
+          <th>customerName</th>
+          <th>address</th>
+          <th>state</th>
+          <th>zipCode</th>
+          <th>phone</th>
+          <th>email</th>
+          <th>Actions</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let Customer of Customer" class="text-center">
+          <td data-visible="false">{{Customer.customerId}}</td>
+          <td>{{Customer.customerTypeId }}</td>
+          <td>{{Customer.customerName }}</td>
+          <td>{{Customer.address }}</td>
+          <td>{{Customer.state }}</td>
+          <td>{{Customer.zipCode }}</td>
+          <td>{{Customer.phone }}</td>
+          <td>{{Customer.email }}</td>
+
+
+          <td>
+            <div class="btn-group mt-1" role="group">
+              <button type="button" class="btn btn-primary" (click)="onUpdateModal(Customer)"><i
+                  class="fas fa-edit"></i></button>
+              <button type="button" class="btn btn-danger" (click)="onDelete(Customer)"><i
+                  class="fas fa-trash-alt"></i></button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <ng-template #template>
+    <div class="modal-header">
+      <h4 class="modal-title">ADD NEW Customer</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body text-center">
+      <p class="list-group-item active text-center text-uppercase">{{modalMessage}}</p>
+      <form [formGroup]="insertForm" (ngSubmit)="onSubmit()">
+        <ul class="list-group">
+          <li class="list-group-item">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="customerTypeId"><i class="fa fa-pencil-square-o"></i></span>
+              </div>
+              <select [(ngModel)]=customerTypeId id="customerTypeId" formControlName="customerTypeId"
+                class="form-control" placeholder="eg: Macbook Air 2019" aria-label="name"
+                aria-describedby="productTitle">
+                <option *ngFor="let c of CustomerType" [ngValue]="c.customerTypeId">{{c.customerTypeName}}</option>
+
+              </select>
+
+            </div>
+          </li>
+
+          <li class="list-group-item">
+            <div class="input-group">
+
+              <input type="text" id="customerName" formControlName="customerName" class="form-control"
+                placeholder="name : Foulen ben Foulen" aria-label="name" aria-describedby="productTitle">
+            </div>
+            <div class="errorMessage" *ngIf="customerName.touched && customerName.errors">
+              <span *ngIf="customerName.hasError('required')">Product Name is required.</span>
+              <span *ngIf="customerName.hasError('maxlength')">Only 50 characters allowed for Customer Name.</span>
+            </div>
+          </li>
+
+          <li class="list-group-item">
+            <div class="input-group">
+
+              <input type="text" id="address" formControlName="address" class="form-control"
+                placeholder="adress: rue 3km" aria-label="name" aria-describedby="productTitle">
+            </div>
+            <div class="errorMessage" *ngIf="address.touched && address.errors">
+              <span *ngIf="address.hasError('required')">Product Name is required.</span>
+              <span *ngIf="address.hasError('maxlength')">Only 50 characters allowed for Customer Name.</span>
+            </div>
+          </li>
+
+          <li class="list-group-item">
+            <div class="input-group">
+
+              <input type="text" id="state" formControlName="state" class="form-control" placeholder="State:Tunis"
+                aria-label="name" aria-describedby="productTitle">
+            </div>
+            <div class="errorMessage" *ngIf="state.touched && state.errors">
+              <span *ngIf="state.hasError('required')">Product Name is required.</span>
+              <span *ngIf="state.hasError('maxlength')">Only 50 characters allowed for Customer Name.</span>
+            </div>
+          </li>
+
+          <li class="list-group-item">
+            <div class="input-group">
+
+              <input type="text" id="zipCode" formControlName="zipCode" class="form-control" placeholder="ZipCode:4160"
+                aria-label="name" aria-describedby="productTitle">
+            </div>
+            <div class="errorMessage" *ngIf="zipCode.touched && zipCode.errors">
+              <span *ngIf="zipCode.hasError('required')">Product Name is required.</span>
+              <span *ngIf="zipCode.hasError('maxlength')">Only 50 characters allowed for Customer Name.</span>
+            </div>
+          </li>
+
+          <li class="list-group-item">
+            <div class="input-group">
+
+              <input type="text" id="phone" formControlName="phone" class="form-control"
+                placeholder="phone:+21690109057" aria-label="name" aria-describedby="productTitle">
+            </div>
+            <div class="errorMessage" *ngIf="phone.touched && phone.errors">
+              <span *ngIf="phone.hasError('required')">Product Name is required.</span>
+              <span *ngIf="phone.hasError('maxlength')">Only 50 characters allowed for Customer Name.</span>
+            </div>
+          </li>
+
+          <li class="list-group-item">
+            <div class="input-group">
+
+              <input type="text" id="email" formControlName="email" class="form-control"
+                placeholder="Email:email@email.com" aria-label="name" aria-describedby="productTitle">
+            </div>
+            <div class="errorMessage" *ngIf="email.touched && email.errors">
+              <span *ngIf="email.hasError('required')">Product Name is required.</span>
+              <span *ngIf="email.hasError('maxlength')">Only 50 characters allowed for Customer Name.</span>
+            </div>
+          </li>
+          <li class="list-group-item">
+            <button class="btn btn-primary btn-block">ADD</button>
+          </li>
+        </ul>
+
+      </form>
+
+    </div>
+  </ng-template>
+
+
+  <ng-template #editTemplate>
+    <div class="modal-header">
+      <h4 class="modal-title">Update Customer</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body text-center">
+      <p class="list-group-item active text-center text-uppercase">{{modalMessage}}</p>
+      <form [formGroup]="updateForm" (ngSubmit)="onUpdate()">
+        <ul class="list-group">
+          <li class="list-group-item">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="customerTypeId"><i class="fa fa-pencil-square-o"></i></span>
+              </div>
+              <select id="customerTypeId" [(ngModel)]="custtype" formControlName="customerTypeId" class="form-control"
+                placeholder="eg: Macbook Air 2019" aria-label="name" aria-describedby="productTitle">
+                <option *ngFor="let c of CustomerType" [ngValue]="c.customerTypeId">{{c.customerTypeName}}</option>
+
+              </select>
+
+            </div>
+          </li>
+
+          <li class="list-group-item">
+            <div class="input-group">
+
+              <input type="text" id="customerName" formControlName="customerName" class="form-control"
+                placeholder="name : Foulen ben Foulen" aria-label="name" aria-describedby="productTitle">
+            </div>
+            <div class="errorMessage" *ngIf="customerName.touched && customerName.errors">
+              <span *ngIf="customerName.hasError('required')">Product Name is required.</span>
+              <span *ngIf="customerName.hasError('maxlength')">Only 50 characters allowed for Customer Name.</span>
+            </div>
+          </li>
+
+          <li class="list-group-item">
+            <div class="input-group">
+
+              <input type="text" id="address" formControlName="address" class="form-control"
+                placeholder="adress: rue 3km" aria-label="name" aria-describedby="productTitle">
+            </div>
+            <div class="errorMessage" *ngIf="address.touched && address.errors">
+              <span *ngIf="address.hasError('required')">Product Name is required.</span>
+              <span *ngIf="address.hasError('maxlength')">Only 50 characters allowed for Customer Name.</span>
+            </div>
+          </li>
+
+          <li class="list-group-item">
+            <div class="input-group">
+
+              <input type="text" id="state" formControlName="state" class="form-control" placeholder="State:Tunis"
+                aria-label="name" aria-describedby="productTitle">
+            </div>
+            <div class="errorMessage" *ngIf="state.touched && state.errors">
+              <span *ngIf="state.hasError('required')">Product Name is required.</span>
+              <span *ngIf="state.hasError('maxlength')">Only 50 characters allowed for Customer Name.</span>
+            </div>
+          </li>
+
+          <li class="list-group-item">
+            <div class="input-group">
+
+              <input type="text" id="zipCode" formControlName="zipCode" class="form-control" placeholder="ZipCode:4160"
+                aria-label="name" aria-describedby="productTitle">
+            </div>
+            <div class="errorMessage" *ngIf="zipCode.touched && zipCode.errors">
+              <span *ngIf="zipCode.hasError('required')">Product Name is required.</span>
+              <span *ngIf="zipCode.hasError('maxlength')">Only 50 characters allowed for Customer Name.</span>
+            </div>
+          </li>
+
+          <li class="list-group-item">
+            <div class="input-group">
+
+              <input type="text" id="phone" formControlName="phone" class="form-control"
+                placeholder="phone:+21690109057" aria-label="name" aria-describedby="productTitle">
+            </div>
+            <div class="errorMessage" *ngIf="phone.touched && phone.errors">
+              <span *ngIf="phone.hasError('required')">Product Name is required.</span>
+              <span *ngIf="phone.hasError('maxlength')">Only 50 characters allowed for Customer Name.</span>
+            </div>
+          </li>
+
+          <li class="list-group-item">
+            <div class="input-group">
+
+              <input type="text" id="email" formControlName="email" class="form-control"
+                placeholder="Email:email@email.com" aria-label="name" aria-describedby="productTitle">
+            </div>
+            <div class="errorMessage" *ngIf="email.touched && email.errors">
+              <span *ngIf="email.hasError('required')">Product Name is required.</span>
+              <span *ngIf="email.hasError('maxlength')">Only 50 characters allowed for Customer Name.</span>
+            </div>
+          </li>
+
+
+
+
+
+
+          <li class="list-group-item">
+            <button class="btn btn-primary btn-block">Update</button>
+          </li>
+        </ul>
+
+      </form>
+
+    </div>
+  </ng-template>
+
+
+
+  <!--  Suc Update Product-->
+  <ng-template #SucTemplate>
+    <div class="modal-body text-center">
+      <b>
+        <p class="list-group-item list-group-item-success">{{modalMessage}}</p>
+      </b>
+    </div>
+  </ng-template>
+  <!-- Unsic Update Product-->
+  <ng-template #FailTemplate>
+    <div class="modal-body text-center">
+      <b>
+        <p class="list-group-item list-group-item-danger">{{modalMessage}}</p>
+      </b>
+    </div>
+  </ng-template>
+  <!-- Unsic Update Product -->
+  <ng-template #DeleteTemplate>
+    <div class="modal-body text-center">
+      <b>
+        <p class="list-group-item list-group-item-warning">Are you sure to delete this recorde ?</p>
+      </b>
+    </div>
+    <div class="container bg-light">
+      <div class="col-md-12 text-center">
+        <button class="btn btn-primary mr-2 mb-2" aria-label="Close" (click)="modalRef.hide()"> No ! </button>
+        <button class="btn btn-warning mr-2 mb-2" (click)="ConfirmDelet(DeletedCustomer)"> Yes Delete ! </button>
+      </div>
+    </div>
+  </ng-template>
+</body>

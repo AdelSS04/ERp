@@ -1,0 +1,218 @@
+<body>
+
+  <br />
+  <div class="container-fluid">
+    <button class="btn btn-warning mb-3 float-left text-uppercase" (click)="onAddSales()">
+      <i class="fa fa-plus"></i> Add Sales
+    </button>
+
+
+    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-bordered table-hover"
+      style="width: 100%">
+      <thead class="text-center thead-dark">
+        <tr>
+          <th>Sales ID</th>
+          <th>Customer</th>
+          <th>Order Date</th>
+          <th>Delivery Date</th>
+          <th>Total</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let Sales of Sales" class="text-center">
+          <td>#{{ Sales.salesId }}</td>
+          <td>{{ Sales.customerId }}</td>
+          <td>{{ Sales.orderDate | date: "MM/dd/yyyy" }}</td>
+          <td>{{ Sales.deliveryDate | date: "MM/dd/yyyy" }}</td>
+          <td>{{ Sales.total }}</td>
+
+          <td>
+            <div class="btn-group mt-1" role="group">
+              <button type="button" class="btn btn-success" (click)="onSelect(Sales)">
+                <i class="fas fa-list"></i>
+              </button>
+              <button type="button" class="btn btn-primary" (click)="onUpdateModal(Sales)">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button type="button" class="btn btn-danger" (click)="onDelete(Sales)">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- ADD PRODUCT MODAL START-->
+  <ng-template #template>
+    <div class="modal-header">
+      <h4 class="modal-title">ADD NEW PRODUCT</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body text-center">
+      <p class="list-group-item active text-center text-uppercase">
+        {{ modalMessage }}
+      </p>
+      <form [formGroup]="insertForm" (ngSubmit)="onSubmit()">
+        <ul class="list-group">
+          <li class="list-group-item">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="customerId"><i class="fa fa-pencil-square-o"></i></span>
+              </div>
+
+              <select [(ngModel)]="customerId" id="customerId" formControlName="customerId" class="form-control"
+                placeholder="eg: Macbook Air 2019" aria-label="name" aria-describedby="productTitle">
+                <option *ngFor="let c of Customer" [ngValue]="c.customerId">
+                  {{ c.customerId }}#{{ c.customerName }}
+                </option>
+              </select>
+            </div>
+          </li>
+          <li class="list-group-item">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="orderDate"><i class="fa fa-pencil-square-o"></i></span>
+              </div>
+              <input formControlName="orderDate" class="form-control" type="date" min="2020-01-01" max="2030-12-31" />
+            </div>
+          </li>
+
+          <li class="list-group-item">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-usd"></i></span>
+              </div>
+              <input formControlName="deliveryDate" class="form-control" type="date" min="2020-01-01"
+                max="2030-12-31" />
+            </div>
+          </li>
+
+          <li class="list-group-item">
+            <button [disabled]="insertForm.invalid" class="btn btn-primary btn-block">
+              ADD
+            </button>
+          </li>
+        </ul>
+      </form>
+    </div>
+  </ng-template>
+
+  <!-- ADD PRODUCT MODAL START-->
+
+  <!-- EDIT PRODUCT MODAL START-->
+
+  <ng-template #editTemplate>
+    <div class="modal-header">
+      <h4 class="modal-title">EDIT PRODUCT DETAILS</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body text-center">
+      <p class="list-group-item active text-center text-uppercase">
+        {{ modalMessage }}
+      </p>
+      <form [formGroup]="updateForm" (ngSubmit)="onUpdate()">
+        <ul class="list-group">
+          <li class="list-group-item" [hidden]="salesId">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="salesId"><i class="fa fa-key"></i></span>
+              </div>
+              <input type="text" class="form-control" formControlName="salesId" />
+            </div>
+          </li>
+          <li class="list-group-item">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="customerId"><i class="fa fa-pencil-square-o"></i></span>
+              </div>
+
+              <select [(ngModel)]="CustomerIDModel" id="customerId" formControlName="customerId" class="form-control"
+                placeholder="eg: Macbook Air 2019" aria-label="name" aria-describedby="productTitle">
+                <option *ngFor="let c of Customer" [ngValue]="c.customerId">
+                  {{ c.customerId }}#{{ c.customerName }}
+                </option>
+              </select>
+            </div>
+          </li>
+          <li class="list-group-item">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="orderDate"><i class="fa fa-pencil-square-o"></i></span>
+              </div>
+              <input formControlName="orderDate" class="form-control" type="date" min="2020-01-01" max="2030-12-31" />
+            </div>
+          </li>
+
+          <li class="list-group-item">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-usd"></i></span>
+              </div>
+              <input formControlName="deliveryDate" class="form-control" type="date" min="2020-01-01"
+                max="2030-12-31" />
+            </div>
+          </li>
+          <li class="list-group-item">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="total"><i class="fa fa-picture-o"></i></span>
+              </div>
+              <input readonly="readonly" type="number" formControlName="total" class="form-control"
+                aria-describedby="productTitle" />
+            </div>
+          </li>
+          <li class="list-group-item">
+            <button [disabled]="updateForm.invalid" class="btn btn-primary btn-block">
+              UPDATE
+            </button>
+          </li>
+        </ul>
+      </form>
+    </div>
+  </ng-template>
+
+  <!-- EDIT PRODUCT MODAL END-->
+
+  <!-- Suc Update Product-->
+  <ng-template #SucTemplate>
+    <div class="modal-body text-center">
+      <b>
+        <p class="list-group-item list-group-item-success">{{ modalMessage }}</p>
+      </b>
+    </div>
+  </ng-template>
+  <!-- Unsic Update Product-->
+  <ng-template #FailTemplate>
+    <div class="modal-body text-center">
+      <b>
+        <p class="list-group-item list-group-item-danger">{{ modalMessage }}</p>
+      </b>
+    </div>
+  </ng-template>
+  <!-- Unsic Update Product-->
+  <ng-template #DeleteTemplate>
+    <div class="modal-body text-center">
+      <b>
+        <p class="list-group-item list-group-item-warning">
+          Are you sure to delete this recorde ?
+        </p>
+      </b>
+    </div>
+    <div class="container bg-light">
+      <div class="col-md-12 text-center">
+        <button class="btn btn-primary mr-2 mb-2" aria-label="Close" (click)="modalRef.hide()">
+          No !
+        </button>
+        <button class="btn btn-warning mr-2 mb-2" (click)="ConfirmDelet(DeletedSales)">
+          Yes Delete !
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</body>

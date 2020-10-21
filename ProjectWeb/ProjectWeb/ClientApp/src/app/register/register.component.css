@@ -1,0 +1,7 @@
+.errorMessage {
+    color: red;
+  }
+  .disabled {
+    background-color: #999999;
+    opacity: .30;
+}

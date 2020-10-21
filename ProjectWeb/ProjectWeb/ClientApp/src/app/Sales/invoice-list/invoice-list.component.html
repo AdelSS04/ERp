@@ -1,0 +1,254 @@
+<body>
+  <div id="printableArea" class="invoice p-3 mb-3">
+    <div class="col-xs-12 heading">INVOICE</div>
+    <!-- title row -->
+    <div class="row">
+      <div class="col-12">
+        <h4>
+          <i class="fas fa-globe"></i> ERRSystem, Inc.
+          <small class="float-right">Date: {{ Sales.orderDate | date: "MM/dd/yyyy" }}</small>
+        </h4>
+      </div>
+      <!-- /.col -->
+    </div>
+    <!-- info row -->
+    <div class="row invoice-info">
+      <div class="col-sm-4 invoice-col">
+        From
+        <address>
+          <strong>ERRSystem, Inc.</strong><br />
+          Madnine<br />
+          Ben gerdane, 4160<br />
+          Phone: +216 90 109 057<br />
+          Email: ERRSystem@ERRSystem.com
+        </address>
+      </div>
+      <!-- /.col -->
+      <div class="col-sm-4 invoice-col">
+        To
+        <address>
+          <strong>{{ SalesCustomer.customerName }}</strong><br />
+          {{SalesCustomer.address}}<br />
+          {{SalesCustomer.state}}, {{SalesCustomer.zipCode}}<br />
+          Phone: {{SalesCustomer.phone}}<br />
+          Email: {{SalesCustomer.email}}
+        </address>
+      </div>
+      <!-- /.col -->
+      <div class="col-sm-4 invoice-col">
+        <b>Invoice #{{ Sales.salesId }}</b><br />
+        <br />
+        <b>Order ID:</b> 4F3S8J<br />
+        <b>Payment Due:</b> {{ Sales.deliveryDate | date: "MM/dd/yyyy"
+            }}<br />
+        <b>Account:</b> 968-34567
+      </div>
+      <!-- /.col -->
+    </div>
+    <!-- /.row -->
+    <div class="input-container">
+      &nbsp;
+      <button type="button" (click)="Addprod()" class="btn btn-success">
+        <i class="fas fa-cart-plus"></i> Add
+      </button>
+      &nbsp;
+      <button type="button" (click)="printDiv('printableArea')" class="btn btn-light">
+        <i class="fas fa-print"></i> Print
+      </button>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-12 table-responsive">
+        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+          class="table table-striped table-responsive-md btn-table" style="width: 100%">
+          <thead class="text-center theme-red">
+            <tr>
+              <th *ngIf="hi == 'hide'" data-visible="false">Id</th>
+              <th>Product Id</th>
+              <th>Product Name</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Total</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let Sales of a3; let i = index" class="text-center">
+              <td *ngIf="hi == 'hide'" data-visible="false">
+                {{ Sales.salesOrderLineId }}
+              </td>
+              <td>{{ Sales.productModelId }}</td>
+              <td>{{ Sales.productName }}</td>
+              <td>{{ Sales.quantity }}</td>
+              <td>
+                {{ Sales.price | currency: "CAD":"symbol-narrow":".2" }}
+              </td>
+              <td>
+                {{ Sales.total | currency: "CAD":"symbol-narrow":".2" }}
+              </td>
+              <td>
+                <div class="btn-group mt-1" role="group">
+                  <button type="button" class="btn btn-primary">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button type="button" class="btn btn-danger" (click)="onDelete(Sales)">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <!-- /.row -->
+
+      <div class="row">
+        <!-- accepted payments column -->
+        <div class="col-6">
+          <p class="lead">Payment Methods:</p>
+          <img src="assets/credit/visa.png" alt="Visa" />
+          <img src="assets/mastercard.png" alt="Mastercard" />
+          <img src="assets/american-express.png" alt="American Express" />
+          <img src="assets/paypal2.png" alt="Paypal" />
+
+          <p class="text-muted well well-sm shadow-none" style="margin-top: 10px">
+            Payment Getway
+          </p>
+        </div>
+        <!-- /.col -->
+        <div class="col-6">
+          <p class="lead">
+            Amount Due {{ Sales.deliveryDate | date: "MM/dd/yyyy" }}
+          </p>
+
+          <div class="table-responsive">
+            <table class="table">
+              <tr>
+                <th style="width: 50%">Subtotal:</th>
+                <td>
+                  {{ Sales.total | currency: "CAD":"symbol-narrow":".2" }}
+                </td>
+              </tr>
+              <tr>
+                <th>Tax (0%)</th>
+                <td>0%</td>
+              </tr>
+              <tr>
+                <th>Shipping:</th>
+                <td>0%</td>
+              </tr>
+              <tr>
+                <th>Total:</th>
+                <td>
+                  {{ Sales.total | currency: "CAD":"symbol-narrow":".2" }}
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+
+    <br />
+  </div>
+
+  <ng-template #AddProduct>
+    <div class="modal-header">
+      <h4 class="modal-title">ADD Product</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body text-center">
+      <p class="list-group-item active text-center text-uppercase">
+        {{ modalMessage }}
+      </p>
+      <form [formGroup]="insertForm" (ngSubmit)="onSubmit()">
+        <ul class="list-group">
+          <li class="list-group-item">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="productModelId"><i class="fa fa-pencil-square-o"></i></span>
+              </div>
+              <select (ngModelChange)="modelChangeFn($event)" id="productModelId" formControlName="productModelId"
+                class="form-control">
+                <option *ngFor="let c of Product" [ngValue]="c">
+                  {{ c.productID }}#{{ c.productName }}
+                </option>
+              </select>
+            </div>
+          </li>
+          <li class="list-group-item">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="price"><i class="fa fa-picture-o"></i></span>
+              </div>
+              <input placeholder="Price" value="{{ adel }}" readonly="readonly" type="number" formControlName="price"
+                class="form-control" />
+            </div>
+          </li>
+          <li class="list-group-item">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="quantity"><i class="fa fa-picture-o"></i></span>
+              </div>
+              <input placeholder="Quantity" (ngModelChange)="modelChangeFnT($event)" type="number"
+                formControlName="quantity" class="form-control" />
+            </div>
+          </li>
+          <li class="list-group-item">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="total"><i class="fa fa-picture-o"></i></span>
+              </div>
+              <input placeholder="Total" readonly="readonly" value="{{ TotalValue }}" type="number"
+                formControlName="total" class="form-control" />
+            </div>
+          </li>
+          <li class="list-group-item">
+            <button [disabled]="insertForm.invalid" class="btn btn-primary btn-block">
+              ADD
+            </button>
+          </li>
+        </ul>
+      </form>
+    </div>
+  </ng-template>
+  <!-- Suc Update Product-->
+  <ng-template #SucTemplate>
+    <div class="modal-body text-center">
+      <b>
+        <p class="list-group-item list-group-item-success">{{ modalMessage }}</p>
+      </b>
+    </div>
+  </ng-template>
+  <!-- Unsic Update Product-->
+  <ng-template #FailTemplate>
+    <div class="modal-body text-center">
+      <b>
+        <p class="list-group-item list-group-item-danger">{{ modalMessage }}</p>
+      </b>
+    </div>
+  </ng-template>
+  <!-- Unsic Update Product-->
+  <ng-template #DeleteTemplate>
+    <div class="modal-body text-center">
+      <b>
+        <p class="list-group-item list-group-item-warning">
+          Are you sure to delete this recorde ?
+        </p>
+      </b>
+    </div>
+    <div class="col-md-12 text-center">
+      <button class="btn btn-primary mr-2 mb-2" aria-label="Close" (click)="modalRef.hide()">
+        No !
+      </button>
+      <button class="btn btn-warning mr-2 mb-2" (click)="ConfirmDelet(DeletedSales)">
+        Yes Delete !
+      </button>
+    </div>
+  </ng-template>
